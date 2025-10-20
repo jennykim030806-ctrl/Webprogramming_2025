@@ -25,6 +25,7 @@ body {
   z-index: 4; /* 배경(1) < 캐릭터(2) < 갈대(4) < 로고(5) */
   pointer-events: none;
 } /* ② 실제 갈대 이미지(큰 여유로 깔고, 하단 기준으로 스윙) */
+
 .reed-img {
   position: absolute;
   bottom: -10px;
@@ -38,17 +39,27 @@ body {
   filter: url(#windSoft);
   will-change: transform, filter;
 }
-.reed-svg {
-  width: 120vw;
-  height: 55vh;
+.reed-img2 {
   position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%) scale(1.05);
-  transform-origin: 50% 100%;
-  animation: reedSway 6.8s linear infinite;
+  bottom: -40px;
+  left: 50%; /* 화면 밖으로 충분히 넘치게(bleed) */
+  width: 120vw; /* 좌우 여유: 110~150vw 사이에서 조절 */
+  height: 55vh; /* 비율 유지 */
+  transform: translateX(-50%) scale(1.05); /* 중앙 정렬 + 약간 확대 */
+  transform-origin: 50% 100%; /* 하단 중심 축으로 휘기 */
   will-change: transform;
+  animation: reedSway2 6.8s linear infinite;
+  filter: url(#windSoft);
+  will-change: transform, filter;
 }
+.reed {
+  position: absolute;
+  bottom: 0;
+  height: 60vh; /* 갈대 전체 높이 조절 */
+  object-fit: contain;
+  transform-origin: bottom center; /* 흔들릴 축 기준 */
+}
+
 @keyframes reedSway {
   0% {
     transform: translateX(calc(-50% - 2.6vw)) rotate(-3deg) scale(1.05);
@@ -71,7 +82,30 @@ body {
   100% {
     transform: translateX(calc(-50% - 2.6vw)) rotate(-3deg) scale(1.05);
   } /* 다시 왼쪽으로 */
-} /* ================================ 캐릭터 ================================ */
+}
+
+@keyframes reedSway2 {
+  0% {
+    transform: translateX(calc(-50% - 1.8vw)) rotate(-2deg) scale(1.05);
+  }
+  20% {
+    transform: translateX(calc(-50% - 3vw)) rotate(-3.2deg) scale(1.05);
+  }
+  40% {
+    transform: translateX(calc(-50% - 2vw)) rotate(-2deg) scale(1.05);
+  }
+  60% {
+    transform: translateX(calc(-50% - 3.5vw)) rotate(-3.6deg) scale(1.05);
+  }
+  80% {
+    transform: translateX(calc(-50% - 2.2vw)) rotate(-2.3deg) scale(1.05);
+  }
+  100% {
+    transform: translateX(calc(-50% - 1.8vw)) rotate(-2deg) scale(1.05);
+  }
+}
+
+/* ================================ 캐릭터 ================================ */
 .character {
   position: fixed;
   bottom: 0;
@@ -90,7 +124,7 @@ body {
   transform: translate(-50%, -5%);
   height: 80vh;
   width: auto;
-  z-index: 5;
+  z-index: 6;
   pointer-events: none;
   display: block;
 }
