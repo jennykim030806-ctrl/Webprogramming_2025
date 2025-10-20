@@ -1,0 +1,148 @@
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: #000;
+} /* ================================ 배경 ================================ */
+.background {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  z-index: 1;
+} /* ================================ 갈대 ================================ */ /* ① 창(뷰포트) 역할: 여기서만 자르고, 내부는 마음껏 넘치게 */
+.reed-wrap {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh; /* 갈대 세로 크기: 40~60vh 사이에서 조절 */
+  overflow: hidden; /* ★ 화면 밖으로 넘친 부분은 여기서 숨김 */
+  z-index: 4; /* 배경(1) < 캐릭터(2) < 갈대(4) < 로고(5) */
+  pointer-events: none;
+} /* ② 실제 갈대 이미지(큰 여유로 깔고, 하단 기준으로 스윙) */
+.reed-img {
+  position: absolute;
+  bottom: -10px;
+  left: 50%; /* 화면 밖으로 충분히 넘치게(bleed) */
+  width: 120vw; /* 좌우 여유: 110~150vw 사이에서 조절 */
+  height: 55vh; /* 비율 유지 */
+  transform: translateX(-50%) scale(1.05); /* 중앙 정렬 + 약간 확대 */
+  transform-origin: 50% 100%; /* 하단 중심 축으로 휘기 */
+  will-change: transform;
+  animation: reedSway 6.8s linear infinite;
+  filter: url(#windSoft);
+  will-change: transform, filter;
+}
+.reed-svg {
+  width: 120vw;
+  height: 55vh;
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%) scale(1.05);
+  transform-origin: 50% 100%;
+  animation: reedSway 6.8s linear infinite;
+  will-change: transform;
+}
+@keyframes reedSway {
+  0% {
+    transform: translateX(calc(-50% - 2.6vw)) rotate(-3deg) scale(1.05);
+  } /* 왼쪽 강하게 시작 */
+  15% {
+    transform: translateX(calc(-50% - 3.2vw)) rotate(-3.6deg) scale(1.05);
+  } /* 왼쪽 끝까지 휘기 */
+  35% {
+    transform: translateX(calc(-50% + -2vw)) rotate(-2deg) scale(1.05);
+  } /* 오른쪽 아주 살짝 */
+  55% {
+    transform: translateX(calc(-50% - 3vw)) rotate(-3.4deg) scale(1.05);
+  } /* 다시 왼쪽, 오래 유지 */
+  80% {
+    transform: translateX(calc(-50% - 3.4vw)) rotate(-3.8deg) scale(1.05);
+  } /* 왼쪽 최대치 유지 */
+  90% {
+    transform: translateX(calc(-50% + -2vw)) rotate(-2deg) scale(1.05);
+  } /* 오른쪽 짧게 되돌림 */
+  100% {
+    transform: translateX(calc(-50% - 2.6vw)) rotate(-3deg) scale(1.05);
+  } /* 다시 왼쪽으로 */
+} /* ================================ 캐릭터 ================================ */
+.character {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-45%, -5%);
+  height: 90vh;
+  width: auto;
+  z-index: 2;
+  pointer-events: none;
+  display: block;
+} /* ================================ 로고 ================================ */
+.logo {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, -5%);
+  height: 80vh;
+  width: auto;
+  z-index: 5;
+  pointer-events: none;
+  display: block;
+}
+.leaf-stream {
+  position: fixed;
+  top: -90vh;
+  right: -90vw;
+  width: 100vw;
+  height: auto;
+  z-index: 3;
+  pointer-events: none;
+  will-change: transform, opacity;
+  animation: leaf-sway var(--dur, 22s) linear var(--ad, 0s) 1 both,
+    leaf-fade var(--dur, 22s) linear var(--ad, 0s) 1 both;
+} /* 좌우 스웨이 + 하강을 동시에 처리 */
+@keyframes leaf-sway {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  15% {
+    transform: translate(-25vw, 20vh) rotate(-5deg);
+  }
+  30% {
+    transform: translate(-55vw, 45vh) rotate(8deg);
+  }
+  50% {
+    transform: translate(-95vw, 80vh) rotate(-5deg);
+  }
+  70% {
+    transform: translate(-140vw, 115vh) rotate(8deg);
+  }
+  85% {
+    transform: translate(-180vw, 145vh) rotate(-5deg);
+  }
+  100% {
+    transform: translate(-210vw, 170vh) rotate(8deg);
+  }
+} /* 투명도 페이드 인/아웃 (이전 버전 그대로 사용) */
+@keyframes leaf-fade {
+  0% {
+    opacity: 0;
+  }
+  6% {
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
