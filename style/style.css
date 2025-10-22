@@ -276,7 +276,7 @@ body {
 .game-info {
   position: fixed;
   right: 6%;
-  bottom: 12vh;
+  bottom: 13vh;
   width: 40vw;
   max-width: 560px;
   color: #fff;
@@ -302,16 +302,16 @@ body {
 /* ✅ 로고: 고정해두지 말고 flow 안에서 배치 */
 .sony-logo {
   position: static; /* fixed 제거 */
-  width: 60px; /* 필요하면 180~260px로 조절 */
+  width: 260px; /* 필요하면 180~260px로 조절 */
   height: auto;
   display: block;
-  margin-left: 20px;
-  margin-bottom: 3px;
+  margin-left: 125px;
+  margin-bottom: 0px;
 }
 
 /* 시놉시스 폰트 키우기 + 줄간격 */
 .synopsis {
-  font-size: 4px;
+  font-size: 20px;
   line-height: 1.7;
   color: #ddd;
   margin-top: -18px;
@@ -324,17 +324,18 @@ body {
 /* 버튼 묶음을 더 아래로 내리고 싶다면 margin-top으로 추가 여백 주기 */
 .link-buttons {
   display: flex;
-  gap: 10px;
+  gap: 50px;
   flex-wrap: wrap;
-  margin-top: 8px; /* ← 더 내리고 싶으면 16~24px로 키워줘 */
+  margin-top: 20px; /* ← 더 내리고 싶으면 16~24px로 키워줘 */
+  margin-left: 50px;
 }
 
 /* 버튼 가독성 업 */
 .btn {
   margin-left: 10px;
-  font-size: 3px;
-  padding: 3px 8px;
-  border-radius: 8px;
+  font-size: 20px;
+  padding: 10px 30px;
+  border-radius: 30px;
   text-decoration: none;
   color: rgba(255, 255, 255, 1);
   background-color: rgba(255, 255, 255, 0.1);
