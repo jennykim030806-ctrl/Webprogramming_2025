@@ -34,4 +34,35 @@ $(document).ready(function () {
     // 일정 간격으로 계속 생성 → 빈틈 없이 이어짐
     setInterval(spawnLeaf, OFFSET);
   });
+  // 덮개 요소 추가
+  $("body").append('<div class="screen-dim"></div>');
+
+  $(".character-hitbox").on("click", function () {
+    $(".character").addClass("focus"); // 캐릭터 이동
+    $(".logo").addClass("focus"); // 로고 이동/축소
+    $(".screen-dim").addClass("show"); // 화면 어둡게
+    $(".game-info").addClass("open"); // ✅ 게임 정보 표시
+    $(this).css("pointer-events", "none");
+  });
+
+  // dim 클릭 시 원복
+  $(".screen-dim").on("click", function () {
+    $(".character").removeClass("focus");
+    $(".logo").removeClass("focus");
+    $(".screen-dim").removeClass("show");
+    $(".game-info").removeClass("open"); // ✅ 게임 정보 숨김
+    $(".character-hitbox").css("pointer-events", "auto");
+  });
+
+  // 캐릭터 위에 마우스를 올리면(포커스가 아닐 때만) 확대
+  $(".character-hitbox").on("mouseenter", function () {
+    const $char = $(".character");
+    if ($char.hasClass("focus")) return; // 포커스 상태면 호버 무시
+    $char.add(".logo").addClass("is-hover");
+  });
+
+  // 마우스가 벗어나면 원복
+  $(".character-hitbox").on("mouseleave", function () {
+    $(".character, .logo").removeClass("is-hover");
+  });
 });

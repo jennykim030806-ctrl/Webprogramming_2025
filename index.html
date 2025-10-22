@@ -4,28 +4,100 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" type="text/css" href="/midterm/style/reset.css" />
-    <link rel="stylesheet" type="text/css" href="/midterm/style/style2.css" />
+    <link rel="stylesheet" type="text/css" href="style/reset.css" />
+    <link rel="stylesheet" type="text/css" href="style/style.css" />
     <script
       src="https://code.jquery.com/jquery-3.7.1.js"
       integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
       crossorigin="anonymous"
     ></script>
-    <script src="/midterm/js/script.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik+Glitch&display=swap"
+      rel="stylesheet"
+    />
+    <script src="js/script.js"></script>
   </head>
   <body>
-    <img
-      src="/midterm/asset/background.png"
-      alt="background"
-      class="background"
-    />
+    <img src="asset/background.png" alt="background" class="background" />
     <!-- 배경 위, 캐릭터/로고 아래에 넣기 -->
     <div class="reed-wrap">
-      <img src="/midterm/asset/reed.png" alt="reed" class="reed-img" />
-      <img src="/midterm/asset/reed.png" alt="reed" class="reed-img2" />
+      <img src="asset/reed.png" alt="reed" class="reed-img" />
     </div>
 
-    <img src="/midterm/asset/character.png" alt="character" class="character" />
-    <img src="/midterm/asset/logo.png" alt="logo" class="logo" />
+    <div class="reed-new">
+      <!-- 1) 기본(가운데, width 300px) -->
+      <img src="asset/reedfront.png" alt="reed" class="reed-img3" />
+
+      <!-- 2) 오른쪽(원경 느낌: left 70%, width 600px, blur 3px, delay 2.5s) -->
+      <img
+        src="asset/reedfront.png"
+        alt="reed"
+        class="reed-img3 left-70 delay-25"
+      />
+
+      <img
+        src="asset/reedfront.png"
+        alt="reed"
+        class="reed-img3 left-40 delay-5"
+      />
+
+      <img
+        src="asset/reedfront.png"
+        alt="reed"
+        class="reed-img3 left-50 delay-10"
+      />
+
+      <img
+        src="asset/reedfront.png"
+        alt="reed"
+        class="reed-img3 left-30 delay-25"
+      />
+
+      <img
+        src="asset/reedfront.png"
+        alt="reed"
+        class="reed-img3 left-20 delay-10"
+      />
+
+      <img src="asset/character.png" alt="character" class="character" />
+
+      <div class="character-hitbox"></div>
+
+      <img src="asset/logo.png" alt="logo" class="logo" />
+    </div>
+
+    <div class="screen-dim"></div>
+
+    <!-- 로고 밑 게임 정보 -->
+    <div class="game-info">
+      <img
+        src="asset/sony.png"
+        alt="Sony Interactive Entertainment"
+        class="sony-logo"
+      />
+
+      <p class="synopsis">
+        In the late 13th century, as Tsushima burns beneath the shadow of the
+        Mongol invasion, the samurai Jin Sakai forsakes tradition to rise as the
+        Ghost and wage a battle for his homeland’s freedom.
+      </p>
+
+      <div class="link-buttons">
+        <a
+          href="https://www.playstation.com/ko-kr/games/ghost-of-tsushima/pc/"
+          target="_blank"
+          rel="noopener"
+          class="btn ps"
+          >PLAYSTATION</a
+        >
+        <a
+          href="https://store.steampowered.com/app/2215430/Ghost_of_Tsushima_DIRECTORS_CUT/"
+          target="_blank"
+          rel="noopener"
+          class="btn steam"
+          >STEAM</a
+        >
+      </div>
+    </div>
   </body>
 </html>

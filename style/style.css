@@ -3,7 +3,8 @@ body {
   margin: 0;
   height: 100%;
   background: #000;
-} /* ================================ 배경 ================================ */
+}
+/* ================================ 배경 ================================ */
 .background {
   position: fixed;
   inset: 0;
@@ -14,7 +15,9 @@ body {
   transform: translate(-50%, -50%);
   object-fit: cover;
   z-index: 1;
-} /* ================================ 갈대 ================================ */ /* ① 창(뷰포트) 역할: 여기서만 자르고, 내부는 마음껏 넘치게 */
+}
+/* ================================ 갈대 ================================ */
+/* ① 창(뷰포트) 역할: 여기서만 자르고, 내부는 마음껏 넘치게 */
 .reed-wrap {
   position: fixed;
   left: 0;
@@ -38,26 +41,6 @@ body {
   animation: reedSway 6.8s linear infinite;
   filter: url(#windSoft);
   will-change: transform, filter;
-}
-.reed-img2 {
-  position: absolute;
-  bottom: -40px;
-  left: 50%; /* 화면 밖으로 충분히 넘치게(bleed) */
-  width: 120vw; /* 좌우 여유: 110~150vw 사이에서 조절 */
-  height: 55vh; /* 비율 유지 */
-  transform: translateX(-50%) scale(1.05); /* 중앙 정렬 + 약간 확대 */
-  transform-origin: 50% 100%; /* 하단 중심 축으로 휘기 */
-  will-change: transform;
-  animation: reedSway2 6.8s linear infinite;
-  filter: url(#windSoft);
-  will-change: transform, filter;
-}
-.reed {
-  position: absolute;
-  bottom: 0;
-  height: 60vh; /* 갈대 전체 높이 조절 */
-  object-fit: contain;
-  transform-origin: bottom center; /* 흔들릴 축 기준 */
 }
 
 @keyframes reedSway {
@@ -84,50 +67,126 @@ body {
   } /* 다시 왼쪽으로 */
 }
 
-@keyframes reedSway2 {
+/* reed-new 컨테이너: 원본처럼 absolute */
+.reed-new {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 50%;
+  overflow: hidden;
+}
+
+.reed-img3 {
+  position: fixed;
+  bottom: -10px;
+  left: 60%;
+  width: 30vw;
+  height: auto;
+  z-index: 100;
+  transform-origin: center bottom;
+  animation: leaf-rotate 4s infinite alternate;
+}
+
+.reed-img3.left-70 {
+  left: 70%;
+  width: 36vw;
+  filter: blur(0.1px);
+}
+
+.reed-img3.left-20 {
+  left: 20%;
+  width: 14vw;
+}
+.reed-img3.left-30 {
+  left: 30%;
+  width: 14vw;
+  filter: blur(0.5px);
+}
+
+.reed-img3.left-40 {
+  left: 40%;
+  width: 20vw;
+}
+.reed-img3.left-50 {
+  left: 50%;
+  width: 30vw;
+  filter: blur(0.5px);
+}
+
+.delay-25 {
+  animation-delay: 2.5s;
+}
+.delay-10 {
+  animation-delay: 1s;
+}
+.delay-5 {
+  animation-delay: 0.5s;
+}
+
+@keyframes leaf-rotate {
   0% {
-    transform: translateX(calc(-50% - 1.8vw)) rotate(-2deg) scale(1.05);
-  }
-  20% {
-    transform: translateX(calc(-50% - 3vw)) rotate(-3.2deg) scale(1.05);
-  }
-  40% {
-    transform: translateX(calc(-50% - 2vw)) rotate(-2deg) scale(1.05);
-  }
-  60% {
-    transform: translateX(calc(-50% - 3.5vw)) rotate(-3.6deg) scale(1.05);
-  }
-  80% {
-    transform: translateX(calc(-50% - 2.2vw)) rotate(-2.3deg) scale(1.05);
+    transform: rotate(-10deg);
   }
   100% {
-    transform: translateX(calc(-50% - 1.8vw)) rotate(-2deg) scale(1.05);
+    transform: rotate(10deg);
   }
 }
 
 /* ================================ 캐릭터 ================================ */
 .character {
+  --char-scale: 1;
   position: fixed;
   bottom: 0;
   left: 50%;
-  transform: translate(-45%, -5%);
+  transform: translate(-45%, -5%) scale(var(--char-scale));
   height: 90vh;
   width: auto;
   z-index: 2;
   pointer-events: none;
   display: block;
-} /* ================================ 로고 ================================ */
+
+  transition: transform 0.5s ease, left 0.5s ease, width 0.5s ease;
+  transform-origin: bottom center;
+}
+/* ================================ 캐릭터 히트박스 ================================ */
+.character-hitbox {
+  position: fixed;
+  bottom: 20px;
+  left: 40%;
+  transform: translate(-45%, -5%) scale(var(--logo-scale));
+  width: 20vw; /* 캐릭터 실제 몸통 크기에 맞춰 조절 */
+  height: 64vh;
+  z-index: 10; /* 캐릭터 위로 */
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0); /* 완전 투명 */
+}
+
+/* 호버 전용 클래스: 포커스 아닐 때만 확대 */
+.character.is-hover:not(.focus) {
+  --char-scale: 1.1; /* 1.1~1.2로 취향 조절 */
+}
+
+/* ================================ 로고 ================================ */
 .logo {
+  --logo-scale: 1;
   position: fixed;
   bottom: 0;
   left: 50%;
-  transform: translate(-50%, -5%);
+  transform: translate(-50%, -5%) scale(var(--logo-scale));
   height: 80vh;
   width: auto;
   z-index: 6;
   pointer-events: none;
   display: block;
+
+  transition: transform 0.5s ease, width 0.5s ease;
+  transform-origin: center bottom;
 }
+/* 호버 때만 살짝 줄이기(포커스 아닐 때만) */
+.logo.is-hover:not(.focus) {
+  --logo-scale: 0.8;
+}
+/* ================================ 낙엽 ================================ */
 .leaf-stream {
   position: fixed;
   top: -90vh;
@@ -179,4 +238,119 @@ body {
   100% {
     opacity: 0;
   }
+}
+
+/* ================================ 화면 덮개 ================================ */
+.screen-dim {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6); /* 반투명 검정 */
+  opacity: 0;
+  pointer-events: none;
+  z-index: 900;
+  transition: opacity 0.4s ease;
+}
+.screen-dim.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ================================ 캐릭터 이동 효과 ================================ */
+/* 기존 .character는 그대로 두고, .focus가 붙을 때만 이동 */
+.character.focus {
+  left: 5%;
+  transform: translate(-10%, -5%) scale(1);
+  z-index: 1001; /* 덮개 위로 */
+  transition: transform 0.4s ease, left 0.4s ease;
+}
+
+/* ================================ 로고 이동 효과 ================================ */
+/* 기본 로고 상태는 그대로 두고, .logo.focus가 붙을 때만 변화 */
+.logo.focus {
+  transform: translate(-20%, -44%) scale(0.8); /* 오른쪽으로 이동 + 살짝 축소 */
+  z-index: 1002; /* 캐릭터(1001)보다 위, dim보다 위 */
+  transition: transform 0.4s ease, z-index 0s linear;
+}
+
+/* 게임 정보 박스를 '세로 플렉스'로: 각 요소 사이 간격은 gap으로 관리 */
+.game-info {
+  position: fixed;
+  right: 6%;
+  bottom: 12vh;
+  width: 40vw;
+  max-width: 560px;
+  color: #fff;
+  z-index: 1003;
+  text-align: left;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px; /* 로고-텍스트-버튼 간 기본 간격 */
+
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.game-info.open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* ✅ 로고: 고정해두지 말고 flow 안에서 배치 */
+.sony-logo {
+  position: static; /* fixed 제거 */
+  width: 60px; /* 필요하면 180~260px로 조절 */
+  height: auto;
+  display: block;
+  margin-left: 20px;
+  margin-bottom: 3px;
+}
+
+/* 시놉시스 폰트 키우기 + 줄간격 */
+.synopsis {
+  font-size: 4px;
+  line-height: 1.7;
+  color: #ddd;
+  margin-top: -18px;
+  margin-bottom: -10px;
+  font-family: "Rubik Glitch", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* 버튼 묶음을 더 아래로 내리고 싶다면 margin-top으로 추가 여백 주기 */
+.link-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 8px; /* ← 더 내리고 싶으면 16~24px로 키워줘 */
+}
+
+/* 버튼 가독성 업 */
+.btn {
+  margin-left: 10px;
+  font-size: 3px;
+  padding: 3px 8px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 1);
+  background-color: rgba(255, 255, 255, 0.1);
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  transition: background 0.25s ease, border-color 0.25s ease,
+    transform 0.1s ease;
+}
+.btn:hover {
+  transform: translateY(-1px);
+}
+.btn.ps:hover {
+  background: #0066cc;
+  border-color: #0066cc;
+}
+.btn.steam:hover {
+  background: #1b2838;
+  border-color: #1b2838;
 }
