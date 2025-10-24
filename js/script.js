@@ -65,4 +65,68 @@ $(document).ready(function () {
   $(".character-hitbox").on("mouseleave", function () {
     $(".character, .logo").removeClass("is-hover");
   });
+
+  // === 번개 이펙트 레이어 보장 ===
+  function ensureFxLayer() {
+    let $layer = $(".fx-layer");
+    if (!$layer.length) {
+      $layer = $('<div class="fx-layer"></div>').appendTo("body");
+    }
+    let $scrim = $(".flash-scrim");
+    if (!$scrim.length) {
+      $scrim = $('<div class="flash-scrim"></div>').appendTo("body");
+    }
+    return { $layer, $scrim };
+  }
+
+  // === 번개 하나 스폰 ===
+  function spawnBoltAt(xVW, yVH) {
+    const { $layer, $scrim } = ensureFxLayer();
+
+    const $bolt = $("<img>", {
+      class: "lightning-bolt",
+      src: "asset/lightning.png",
+      alt: "lightning",
+    });
+
+    // // 살짝 회전/크기 랜덤
+    // const rot = (Math.random() * 10 - 5).toFixed(1); // -5 ~ 5deg
+    // const scale = 0.9 + Math.random() * 0.3; // 0.9 ~ 1.2
+
+    // $bolt.css({
+    //   left: xVW + "vw",
+    //   top: yVH + "vh",
+    //   transform: `translate(-50%, -50%) rotate(${rot}deg) scale(${scale})`,
+    // });
+
+    $layer.append($bolt);
+    // reflow 후 애니메이션 시작
+    requestAnimationFrame(() => $bolt.addClass("show"));
+
+    // 화면 번쩍(주변 밝기)도 위치 맞춰서
+    $scrim.get(0).style.setProperty("--x", xVW + "vw");
+    $scrim.get(0).style.setProperty("--y", yVH + "vh");
+    $scrim.addClass("show");
+
+    // 정리
+    $bolt.on("animationend", () => $bolt.remove());
+    $scrim.on("animationend", () => $scrim.removeClass("show"));
+  }
+
+  // === 배경 클릭 시 2~3회 랜덤 번개 ===
+  $(".background").on("click", function () {
+    const count = Math.floor(Math.random() * 2) + 2; // 2~3회
+    let delay = 0;
+
+    for (let i = 0; i < count; i++) {
+      // 화면 우측 10~90vw, 상단 10~60vh 랜덤 위치
+      const x = 10 + Math.random() * 80;
+      const y = 10 + Math.random() * 50;
+
+      setTimeout(() => spawnBoltAt(x, y), delay);
+
+      // 번개 사이 텀 180~520ms
+      delay += 180 + Math.random() * 340;
+    }
+  });
 });
