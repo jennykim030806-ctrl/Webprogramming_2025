@@ -2,10 +2,13 @@ html,
 body {
   margin: 0;
   height: 100%;
-  background: #000;
+  background: #000; /* 전체 배경은 블랙: 어두운 무대 위로 이펙트 대비 극대화 */
 }
+
 /* ================================ 배경 ================================ */
 .background {
+  /* 배경 이미지를 화면 중앙 기준으로 고정 배치.
+     translate(-50%, -50%)로 정확히 가운데 정렬. */
   position: fixed;
   inset: 0;
   width: 100vw;
@@ -13,78 +16,84 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  object-fit: cover;
-  z-index: 1;
+  object-fit: cover; /* 이미지 비율을 유지하면서 화면을 덮도록 */
+  z-index: 1; /* 가장 아래쪽 레이어(갈대/캐릭터/로고/이펙트보다 뒤) */
 }
-/* ================================ 갈대 ================================ */
-/* ① 창(뷰포트) 역할: 여기서만 자르고, 내부는 마음껏 넘치게 */
+
+/* ================================ 갈대(후경) ================================ */
+/* ① 뷰포트 역할: 내부 콘텐츠가 넘치면 자른다 */
 .reed-wrap {
+  /* 실제 갈대 이미지는 더 크게, 조금 튀어나오게 만들고,
+     이 래퍼가 넘친 부분을 잘라 화면 깔끔 유지 */
   position: fixed;
   left: 0;
-  bottom: -25px;
+  bottom: -25px; /* 아주 미세한 아래로 오프셋: 하단 경계선 이질감 감소 */
   width: 100vw;
-  height: 100vh; /* 갈대 세로 크기: 40~60vh 사이에서 조절 */
-  overflow: hidden; /* ★ 화면 밖으로 넘친 부분은 여기서 숨김 */
-  z-index: 10; /* 배경(1) < 캐릭터(2) < 갈대(4) < 로고(5) */
-  pointer-events: none;
-} /* ② 실제 갈대 이미지(큰 여유로 깔고, 하단 기준으로 스윙) */
-
-.reed-img {
-  position: absolute;
-  bottom: -10px;
-  left: 50%; /* 화면 밖으로 충분히 넘치게(bleed) */
-  width: 120vw; /* 좌우 여유: 110~150vw 사이에서 조절 */
-  height: 55vh; /* 비율 유지 */
-  transform: translateX(-50%) scale(1.05); /* 중앙 정렬 + 약간 확대 */
-  transform-origin: 50% 100%; /* 하단 중심 축으로 휘기 */
-  will-change: transform;
-  animation: reedSway 6.8s linear infinite;
-  filter: url(#windSoft);
-  will-change: transform, filter;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 10; /* 배경(1) 위, 전경/캐릭터/로고 아래 */
+  pointer-events: none; /* 인터랙션 방해 금지 */
 }
 
+/* ② 실제 갈대 이미지(하단 기준으로 스윙) */
+.reed-img {
+  position: absolute;
+  bottom: -10px; /* 하단 경계선 이질감 줄임 */
+  left: 50%;
+  width: 120vw; /* 좌우 여유를 크게 두어 스윙 시 잘림 방지 */
+  height: 55vh; /* 세로는 화면 높이 기준 비율 */
+  transform: translateX(-50%) scale(1.05); /* 중앙 정렬 + 미세 확대로 몰입감 */
+  transform-origin: 50% 100%; /* 하단 중심을 축으로 스윙 → 나풀거리는 느낌 */
+  animation: reedSway 6.8s linear infinite; /* 바람에 흔들리는 듯한 루프 */
+  filter: url(#windSoft); /* (별도의 SVG 필터가 문서 내에 있다고 가정) 흐림/왜곡 효과 */
+  will-change: transform, filter; /* 성능 힌트: GPU 가속 */
+}
+
+/* 갈대 스윙: 왼쪽에 오래 머물렀다 살짝 오른쪽 갔다가 다시 왼쪽으로 → 바람 방향 고정 느낌 */
 @keyframes reedSway {
   0% {
     transform: translateX(calc(-50% - 2.6vw)) rotate(-3deg) scale(1.05);
-  } /* 왼쪽 강하게 시작 */
+  }
   15% {
     transform: translateX(calc(-50% - 3.2vw)) rotate(-3.6deg) scale(1.05);
-  } /* 왼쪽 끝까지 휘기 */
+  }
   35% {
-    transform: translateX(calc(-50% + -2vw)) rotate(-2deg) scale(1.05);
-  } /* 오른쪽 아주 살짝 */
+    transform: translateX(calc(-50% - 2vw)) rotate(-2deg) scale(1.05);
+  }
   55% {
     transform: translateX(calc(-50% - 3vw)) rotate(-3.4deg) scale(1.05);
-  } /* 다시 왼쪽, 오래 유지 */
+  }
   80% {
     transform: translateX(calc(-50% - 3.4vw)) rotate(-3.8deg) scale(1.05);
-  } /* 왼쪽 최대치 유지 */
+  }
   90% {
-    transform: translateX(calc(-50% + -2vw)) rotate(-2deg) scale(1.05);
-  } /* 오른쪽 짧게 되돌림 */
+    transform: translateX(calc(-50% - 2vw)) rotate(-2deg) scale(1.05);
+  }
   100% {
     transform: translateX(calc(-50% - 2.6vw)) rotate(-3deg) scale(1.05);
-  } /* 다시 왼쪽으로 */
+  }
 }
 
+/* ================================ 갈대(전경) ================================ */
+/* 전경 갈대 묶음: 위치/크기/블러를 달리한 여러 장을 겹쳐 원근과 깊이를 만듦 */
 .reed-img3 {
   position: fixed;
   bottom: -35px;
   left: 60%;
   width: 30vw;
   height: auto;
-  z-index: 11;
-  transform-origin: center bottom;
-  animation: leaf-rotate 4s infinite alternate;
+  z-index: 11; /* 후경 갈대(10)보다 앞, 캐릭터(7)/로고(20) 사이의 중간층 */
+  transform-origin: center bottom; /* 회전 중심을 아래쪽으로 */
+  animation: leaf-rotate 4s infinite alternate; /* 미세한 좌우 흔들림으로 생동감 */
   pointer-events: none;
 }
 
+/* 위치/크기/블러의 변주로 원근감 조정 */
 .reed-img3.left-70 {
   left: 70%;
   width: 36vw;
   filter: blur(0.1px);
 }
-
 .reed-img3.left-20 {
   left: 20%;
   width: 14vw;
@@ -94,7 +103,6 @@ body {
   width: 14vw;
   filter: blur(0.5px);
 }
-
 .reed-img3.left-40 {
   left: 40%;
   width: 20vw;
@@ -105,6 +113,7 @@ body {
   filter: blur(0.5px);
 }
 
+/* 각 이미지의 애니메이션 시작 시점을 다르게 해서 '동시성' 느낌 제거 */
 .delay-25 {
   animation-delay: 2.5s;
 }
@@ -115,6 +124,7 @@ body {
   animation-delay: 0.5s;
 }
 
+/* 전경 갈대의 좌우 소폭 회전 애니메이션 */
 @keyframes leaf-rotate {
   0% {
     transform: rotate(-10deg);
@@ -126,34 +136,37 @@ body {
 
 /* ================================ 캐릭터 ================================ */
 .character {
-  --char-scale: 1;
+  --char-scale: 1; /* hover 시 1.1로 살짝 확대, focus 시 다시 1로 고정 */
   position: fixed;
   bottom: 0;
   left: 50%;
   transform: translate(-45%, -5%) scale(var(--char-scale));
-  height: 90vh;
+  height: 90vh; /* 큰 실루엣으로 존재감 */
   width: auto;
-  z-index: 7;
-  pointer-events: none;
+  z-index: 7; /* 전경 갈대(11)보다 뒤, 배경(1)보단 앞 */
+  pointer-events: none; /* 히트박스가 이벤트 수신 */
   display: block;
-
-  transition: transform 0.5s ease, left 0.5s ease, width 0.5s ease;
   transform-origin: bottom center;
+  transition: transform 0.5s ease, left 0.5s ease, width 0.5s ease;
 }
+
 /* ================================ 캐릭터 히트박스 ================================ */
+/* 눈에 보이지 않는 클릭 영역 설정.
+   transform에 var(--logo-scale)가 들어가는데, 로고 크기와 맞춘 보정으로 추정.
+   값 정의가 별도로 없으므로 기존 동작을 유지. */
 .character-hitbox {
   position: fixed;
   bottom: 20px;
   left: 40%;
   transform: translate(-45%, -5%) scale(var(--logo-scale));
-  width: 20vw; /* 캐릭터 실제 몸통 크기에 맞춰 조절 */
-  height: 64vh;
-  z-index: 50; /* 캐릭터 위로 */
+  width: 20vw; /* 캐릭터 몸통 대략 */
+  height: 64vh; /* 상체 + 무기 등 포함 높이 */
+  z-index: 50; /* 캐릭터보다 위여야 클릭 가능 */
   cursor: pointer;
   background: rgba(255, 255, 255, 0); /* 완전 투명 */
 }
 
-/* 호버 전용 클래스: 포커스 아닐 때만 확대 */
+/* 포커스 아닐 때만 호버 시 캐릭터/로고 스케일 변화를 적용해 '살아있음'을 전달 */
 .character.is-hover:not(.focus) {
   --char-scale: 1.1;
   transition: transform 0.7s;
@@ -161,27 +174,29 @@ body {
 
 /* ================================ 로고 ================================ */
 .logo {
-  --logo-scale: 1;
+  --logo-scale: 1; /* hover 시 0.8로 살짝 축소, focus 시 위치 변경 */
   position: fixed;
   bottom: 0;
   left: 50%;
   transform: translate(-50%, -5%) scale(var(--logo-scale));
   height: 80vh;
   width: auto;
-  z-index: 20;
+  z-index: 20; /* 캐릭터(7)보다 위, 정보 박스(1003)보단 아래 */
   pointer-events: none;
   display: block;
-
-  transition: transform 0.5s ease, width 0.5s ease;
   transform-origin: center bottom;
+  transition: transform 0.5s ease, width 0.5s ease;
 }
-/* 호버 때만 살짝 줄이기(포커스 아닐 때만) */
+
 .logo.is-hover:not(.focus) {
   --logo-scale: 0.8;
   transition: transform 0.7s;
 }
+
 /* ================================ 낙엽 ================================ */
 .leaf-stream {
+  /* 우상단(화면 바깥)에서 시작해서 좌하단(화면 바깥)으로 빠지는 경로.
+     z-index:3으로 캐릭터(7)와 갈대(11) 사이 뒤쪽 느낌을 유지. */
   position: fixed;
   top: -90vh;
   right: -90vw;
@@ -190,9 +205,13 @@ body {
   z-index: 3;
   pointer-events: none;
   will-change: transform, opacity;
+  /* 두 개의 애니메이션을 동일한 시간/지연으로 동시에 적용
+     --dur: 전체 시간(초), --ad: 시작 시점(초, 음수면 이미 진행된 상태로 시작) */
   animation: leaf-sway var(--dur, 22s) linear var(--ad, 0s) 1 both,
     leaf-fade var(--dur, 22s) linear var(--ad, 0s) 1 both;
-} /* 좌우 스웨이 + 하강을 동시에 처리 */
+}
+
+/* 좌우 흔들림을 섞어가며 하강 → 비정형적인 바람결을 가정한 간헐적 회전 포함 */
 @keyframes leaf-sway {
   0% {
     transform: translate(0, 0) rotate(0deg);
@@ -215,7 +234,9 @@ body {
   100% {
     transform: translate(-210vw, 170vh) rotate(8deg);
   }
-} /* 투명도 페이드 인/아웃 (이전 버전 그대로 사용) */
+}
+
+/* 등장/퇴장 시 투명도로 연결 → 물 흐르듯 '스트림'으로 보이게 함 */
 @keyframes leaf-fade {
   0% {
     opacity: 0;
@@ -234,39 +255,40 @@ body {
   }
 }
 
-/* ================================ 화면 덮개 ================================ */
+/* ================================ 화면 덮개(디밍) ================================ */
+/* 캐릭터/로고에 포커스가 잡혔을 때 배경을 어둡게 하여 시선 집중 */
 .screen-dim {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6); /* 반투명 검정 */
+  background: rgba(0, 0, 0, 0.6);
   opacity: 0;
-  pointer-events: none;
-  z-index: 900;
+  pointer-events: none; /* show 전에는 클릭 차단 X */
+  z-index: 900; /* 캐릭터/로고보다 위, 정보 박스/버튼보다 아래 */
   transition: opacity 0.4s ease;
 }
 .screen-dim.show {
   opacity: 1;
-  pointer-events: auto;
+  pointer-events: auto; /* show 중엔 dim 영역이 클릭을 받아 원복 트리거 */
 }
 
-/* ================================ 캐릭터 이동 효과 ================================ */
-/* 기존 .character는 그대로 두고, .focus가 붙을 때만 이동 */
+/* ================================ 포커스 효과 ================================ */
 .character.focus {
+  /* 캐릭터는 왼쪽으로 치우치고 원래 크기로 복귀 → 오른쪽 공간에 정보/로고가 배치될 여유 확보 */
   left: 5%;
   transform: translate(-10%, -5%) scale(1);
-  z-index: 1001; /* 덮개 위로 */
+  z-index: 1001; /* dim(900) 위로 올려 캐릭터가 덮개보다 위에 보이게 */
   transition: transform 1s ease, left 1s ease;
 }
 
-/* ================================ 로고 이동 효과 ================================ */
-/* 기본 로고 상태는 그대로 두고, .logo.focus가 붙을 때만 변화 */
 .logo.focus {
-  z-index: 1002; /* 캐릭터(1001)보다 위, dim보다 위 */
-  transform: translate(-20%, -44%) scale(0.8); /* 오른쪽으로 이동 + 살짝 축소 */
+  /* 로고는 오른쪽/위쪽으로 이동하면서 약간 축소 → 정보 박스와 함께 컴포지션 구성 */
+  z-index: 1002; /* 캐릭터(1001)보다 위 */
+  transform: translate(-20%, -44%) scale(0.8);
   transition: transform 1s ease, z-index 0s linear;
 }
 
-/* 게임 정보 박스를 '세로 플렉스'로: 각 요소 사이 간격은 gap으로 관리 */
+/* ================================ 게임 정보 박스 ================================ */
+/* 초기엔 숨김(투명/포인터 비활성), .open 시 서서히 페이드/슬라이드 인 */
 .game-info {
   position: fixed;
   right: 6%;
@@ -274,13 +296,13 @@ body {
   width: 40vw;
   max-width: 560px;
   color: #fff;
-  z-index: 1003;
+  z-index: 1003; /* 캐릭터/로고/디밍보다 위 */
   text-align: left;
 
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 10px; /* 로고-텍스트-버튼 간 기본 간격 */
+  gap: 10px;
 
   opacity: 0;
   transform: translateY(8px);
@@ -293,38 +315,35 @@ body {
   pointer-events: auto;
 }
 
-/* ✅ 로고: 고정해두지 말고 flow 안에서 배치 */
+/* 로고/텍스트/버튼의 시각적 정리 */
 .sony-logo {
-  position: static; /* fixed 제거 */
-  width: 260px; /* 필요하면 180~260px로 조절 */
+  position: static;
+  width: 260px;
   height: auto;
   display: block;
-  margin-left: 125px;
+  margin-left: 125px; /* 오른쪽 배치와 균형을 위한 좌측 여백 */
   margin-bottom: 0px;
 }
 
-/* 시놉시스 폰트 키우기 + 줄간격 */
 .synopsis {
   font-size: 20px;
   line-height: 1.7;
   color: #ddd;
-  margin-top: -18px;
+  margin-top: -18px; /* 위 요소와 간격 미세 튜닝 */
   margin-bottom: -10px;
-  font-family: "Rubik Glitch", system-ui;
+  font-family: "Rubik Glitch", system-ui; /* 제목체 느낌의 글꼴 */
   font-weight: 400;
   font-style: normal;
 }
 
-/* 버튼 묶음을 더 아래로 내리고 싶다면 margin-top으로 추가 여백 주기 */
 .link-buttons {
   display: flex;
   gap: 50px;
   flex-wrap: wrap;
-  margin-top: 20px; /* ← 더 내리고 싶으면 16~24px로 키워줘 */
+  margin-top: 20px;
   margin-left: 50px;
 }
 
-/* 버튼 가독성 업 */
 .btn {
   margin-left: 10px;
   font-size: 20px;
@@ -350,27 +369,29 @@ body {
   border-color: #1b2838;
 }
 
-/* 이펙트 전용 레이어: 배경 위, 갈대(4)보다 살짝 위. 로고(6)와 UI보다 아래 */
-/* 이펙트 레이어는 그대로, 필요하면 z-index를 5~101로 조절 */
+/* ================================ 이펙트 레이어 & 번개 ================================ */
+/* 번개 이미지를 전체 화면에 '덮는' 레이어. 필요 시에만 JS로 생성됨. */
 .fx-layer {
   position: fixed;
   inset: 0;
-  z-index: 5; /* 갈대보다 위에 두려면 101로 올려도 됨 */
+  z-index: 5; /* 배경(1) 위, 캐릭터(7)/전경 갈대(11)보다 뒤 */
   pointer-events: none;
 }
 
-/* 번개를 '화면 전체'로 꽉 채우기 */
 .lightning-bolt {
+  /* 한 번의 번개는 전체 화면을 덮는 이미지로 들어오며,
+     mix-blend-mode: screen 으로 밝은 영역만 발광처럼 보이게 한다. */
   position: absolute;
-  inset: 0; /* top:0;right:0;bottom:0;left:0 */
+  inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover; /* 화면 비율에 맞춰 채우기(잘림 허용) */
-  opacity: 0;
+  object-fit: cover;
+  opacity: 0; /* keyframes에서 0→1→0으로 점멸 */
   mix-blend-mode: screen;
-  filter: drop-shadow(0 0 10px #fff);
+  filter: drop-shadow(0 0 10px #fff); /* 번개 가장자리에 빛 번짐 느낌 */
 }
 
+/* 짧은 점멸 애니메이션: steps(3,end)로 약간의 '스냅' 감을 부여 */
 @keyframes bolt-flash {
   0% {
     opacity: 0;
@@ -390,19 +411,24 @@ body {
 }
 .lightning-bolt.show {
   animation: bolt-flash 180ms steps(3, end) 1;
-} /* 화면 전체 번쩍(선택 사항: 번개 순간 주위만 살짝 밝아짐) */
+}
+
+/* 번개 주변만 순간 밝아지는 스크림.
+   --x/--y 커스텀 속성으로 중심 좌표를 제어하여 클릭 위치 근처를 밝힌다. */
 .flash-scrim {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 1000;
+  z-index: 1000; /* dim(900)보다 위, 캐릭터(1001)/로고(1002)보다 아래 */
   opacity: 0;
   background: radial-gradient(
     circle at var(--x, 50%) var(--y, 30%),
-    rgba(255, 255, 255, 1),
+    /* 중심 좌표 (기본값: 중앙 위쪽) */ rgba(255, 255, 255, 1),
     rgba(255, 255, 255, 0) 60%
   );
 }
+
+/* 스크림 페이드: 빠르게 밝아졌다가 곧 사라짐 */
 @keyframes screen-flash {
   0% {
     opacity: 0;
@@ -419,4 +445,42 @@ body {
 }
 .flash-scrim.show {
   animation: screen-flash 220ms ease-out 1;
+}
+
+/* ================================ BGM 토글 버튼 ================================ */
+/* 좌상단 고정 버튼. 상태는 아이콘(🔇/🔊)과 aria-pressed로 표현 */
+#bgm-toggle {
+  position: fixed;
+  top: 18px;
+  left: 18px;
+  z-index: 1200; /* 모든 레이어 위에서 항상 접근 가능 */
+  padding: 10px 14px;
+  border: none;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.12s ease, background 0.2s ease, opacity 0.2s ease;
+}
+#bgm-toggle:hover {
+  transform: translateY(-1px);
+}
+#bgm-toggle:active {
+  transform: translateY(0);
+}
+#bgm-toggle[aria-pressed="true"] {
+  background: rgba(96, 96, 96, 0.5);
+}
+
+@media (max-width: 600px) {
+  #bgm-toggle {
+    top: 12px;
+    left: 12px;
+    padding: 9px 12px;
+    font-size: 13px;
+  }
 }

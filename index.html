@@ -4,68 +4,73 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+
+    <!-- CSS -->
     <link rel="stylesheet" type="text/css" href="style/reset.css" />
     <link rel="stylesheet" type="text/css" href="style/style.css" />
+
+    <!-- jQuery -->
     <script
       src="https://code.jquery.com/jquery-3.7.1.js"
       integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
       crossorigin="anonymous"
     ></script>
+
+    <!-- Font -->
     <link
       href="https://fonts.googleapis.com/css2?family=Rubik+Glitch&display=swap"
       rel="stylesheet"
     />
+
+    <!-- Main JS -->
     <script src="js/script.js"></script>
   </head>
   <body>
+    <!-- 배경 -->
     <img src="asset/background.png" alt="background" class="background" />
-    <!-- 배경 위, 캐릭터/로고 아래에 넣기 -->
+
+    <!-- 갈대(후경) -->
     <div class="reed-wrap">
       <img src="asset/reed.png" alt="reed" class="reed-img" />
     </div>
 
+    <!-- 전경 레이어: 갈대(전경) / 캐릭터 / 로고 -->
     <div class="reed-new">
-      <!-- 1) 기본(가운데, width 300px) -->
+      <!-- 전경 갈대 묶음 -->
       <img src="asset/reedfront.png" alt="reed" class="reed-img3" />
-
-      <!-- 2) 오른쪽(원경 느낌: left 70%, width 600px, blur 3px, delay 2.5s) -->
       <img
         src="asset/reedfront.png"
         alt="reed"
         class="reed-img3 left-70 delay-25"
       />
-
       <img
         src="asset/reedfront.png"
         alt="reed"
         class="reed-img3 left-40 delay-5"
       />
-
       <img
         src="asset/reedfront.png"
         alt="reed"
         class="reed-img3 left-50 delay-10"
       />
-
       <img
         src="asset/reedfront.png"
         alt="reed"
         class="reed-img3 left-30 delay-25"
       />
-
       <img
         src="asset/reedfront.png"
         alt="reed"
         class="reed-img3 left-20 delay-10"
       />
 
+      <!-- 캐릭터 / 히트박스 / 로고 -->
       <img src="asset/character.png" alt="character" class="character" />
-
       <div class="character-hitbox"></div>
-
       <img src="asset/logo.png" alt="logo" class="logo" />
     </div>
 
+    <!-- 화면 덮개(디밍) : JS에서 중복 생성하던 부분 제거하고 여기 것만 사용 -->
     <div class="screen-dim"></div>
 
     <!-- 로고 밑 게임 정보 -->
@@ -75,13 +80,11 @@
         alt="Sony Interactive Entertainment"
         class="sony-logo"
       />
-
       <p class="synopsis">
         In the late 13th century, as Tsushima burns beneath the shadow of the
         Mongol invasion, the samurai Jin Sakai forsakes tradition to rise as the
         Ghost and wage a battle for his homeland’s freedom.
       </p>
-
       <div class="link-buttons">
         <a
           href="https://www.playstation.com/ko-kr/games/ghost-of-tsushima/pc/"
@@ -99,5 +102,8 @@
         >
       </div>
     </div>
+
+    <!-- BGM 토글 버튼 -->
+    <button id="bgm-toggle" aria-pressed="false" title="Toggle BGM">🔇</button>
   </body>
 </html>
